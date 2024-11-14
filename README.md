@@ -1,5 +1,5 @@
 
-# Push Notifications with Images in Notification Center
+# 1. Push Notifications with Images in Notification Center
 
 This guide demonstrates how to send and display push notifications with images in the iOS notification center, along with customizations for handling media attachments.
 
@@ -108,3 +108,54 @@ To test push notifications with images:
 ## Additional Resources
 - [Apple Push Notification Service Documentation](https://developer.apple.com/documentation/usernotifications)
 - [UNNotificationAttachment Class](https://developer.apple.com/documentation/usernotifications/unnotificationattachment)
+
+
+# 2. Disabling Push Notifications Programmatically on iOS
+
+This guide explains how to disable push notifications or prevent them from being shown on iOS devices by using various methods in your app.
+
+## Methods to Disable Push Notifications
+
+### 1. Disable Local Notifications
+If you want to prevent local notifications from being shown, you can remove pending notifications from the notification center.
+
+#### Code Example:
+```swift
+UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+```
+
+### 2. Request Notification Permission
+When requesting permission to show notifications, you can handle the scenario where permission is not granted by showing relevant messages or simply avoiding requesting the permission.
+
+#### Code Example:
+```swift
+UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+    if !granted {
+        // Handle the case where the permission is denied
+    }
+}
+```
+
+### 3. Redirect to Device's Push Notification Settings
+You can't directly disable push notifications programmatically, but you can guide the user to the app settings where they can manually disable notifications.
+
+#### Code Example:
+```swift
+if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+    UIApplication.shared.open(settingsURL)
+}
+```
+
+### 4. Modify Server-Side Push Notification Delivery
+If you want to stop receiving notifications, you can unsubscribe the device token from the server. Removing the device token will stop further push notifications from being sent to the device.
+
+#### Example:
+On the server-side, stop sending push notifications by removing the device token from the subscription list.
+
+## Notes:
+- While iOS does not allow fully disabling push notifications programmatically from the app side, the above methods offer control over when and how notifications are shown.
+- It's recommended to respect users' preferences when managing notifications to provide a better user experience.
+
+## Additional Resources:
+- [User Notifications Framework Documentation](https://developer.apple.com/documentation/usernotifications)
+
